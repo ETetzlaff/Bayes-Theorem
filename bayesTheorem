@@ -1,0 +1,112 @@
+
+def getA():             #get option A information
+    qty = raw_input("How many options are there?: ")
+    a = []               #declare the list containing all options for A
+    for i in range(0, int(qty)):
+        a.append(raw_input("Please enter your options: "))
+    return a  
+def getB():             #get option B information
+    qty = raw_input("How many sub-options are there?: ")
+    b = []              #declare the list containing all options for B
+    for i in range(0, int(qty)):
+        b.append(raw_input("Please enter your options: "))
+    return b
+def getStats(a, b):         #get number inputs for each option to construct the "table"
+    statTable = []
+    tempStorage = []        #temporary list
+    for i in range(0, len(a)):
+        for x in range(0, len(b)):
+            tempStorage.append(float((raw_input("Please enter amount: "))))   #gather list of data for each column
+        statTable.append(tempStorage)           #append list to each tuple
+        tempStorage = []
+    print statTable
+    return statTable
+
+def calcBasic(a):           #calculate basic percentages
+    runningTotal = 0        #variable for total of all data
+    tempTotal = 0           #declare variable for summing each line in list
+    tempList = []           #list for temporary data
+    statList = []           #list to contain calculated stats for all items totaled
+    for i in range(0, len(a)):      #sum total of each sublist and get a grand total
+        for x in range(0, len(a[i])):
+            tempTotal += a[i][x]
+        runningTotal += tempTotal
+        tempList.append(tempTotal)
+        print tempTotal
+        tempTotal = 0
+    print runningTotal
+    for i in range(0, len(a)):      #calculate percentages for total of all pieces
+        for x in range (0, len(a[i])):
+            print tempList[x]
+            statList.append(a[i][x] / runningTotal)
+    print statList                
+    return statList
+ 
+def calcInd(a):   
+    runningTotal = 0
+    tempList = []
+    tempTotal = 0
+    for i in range(0, len(a)):      #sum total of each sublist and get a grand total
+        for x in range(0, len(a[i])):
+            tempTotal += a[i][x]
+        runningTotal += tempTotal
+        tempList.append(tempTotal)
+        print tempTotal
+        tempTotal = 0
+    
+    temptList = []                  #temp 2 list
+    indStats = []                   #individual tuple stat list
+    for i in range(0, len(a)):      #calculate percentages for each individual tuple
+        for x in range (0, len(a[i])):
+            temptList.append(a[i][x]/tempList[i])
+        indStats.append(temptList)
+        temptList = []
+    print indStats
+    return indStats
+def findMatch(a, b, c, x):                #find match from answer given to piece in lists
+    for i in range(0, len(a)):
+        if x == a[i]:
+            print c[i]
+            return c[i]
+            
+    
+    tempList = []
+    rCount = 0
+    for i in range(0, len(b)):        
+        if x == b[i]:
+            for z in range(0, len(c)):
+                tempList.append(c[z][rCount])
+            print tempList
+            return tempList
+        rCount += 1
+def sumList(list):                  #sum of a list
+    count = 0                       #sum of the list
+    for i in range(0, len(list)):
+        count += list[i]
+    return count
+def findInd(a, b, z):
+    for i in range (0, len(a)):
+        if z == a[i]:
+            return i
+    for i in range (0, len(b)):
+        if z == b[i]:
+            return i                        
+
+def bayesTheorem():
+    a = getA()                  #get first group
+    b = getB()                  #get second group
+    c = getStats(a, b)          #get data numbers
+    d = calcBasic(c)            #get overall total percentage list
+    e = calcInd(c)              #get each group percentage list
+    x = str(raw_input('What is the first condition: '))
+    condition1 = findMatch(a, b, c, x)     #get first condition list
+    y = str(raw_input('Is there a second condition? y/n: '))        #if there is a second condition, get it
+    if y == 'y':
+        z = str(raw_input('What is the second condition?: '))
+        rInd = findInd(a, b, z)         #get index of condition 2 to know what piece of condition 1
+        total = sumList(condition1)     #get total of first condition
+        bProb = condition1[rInd]/total      #calculate the probability given the 2 conditions
+        print 'The probability of ', x ,' is ', bProb
+    
+    
+bayesTheorem()
